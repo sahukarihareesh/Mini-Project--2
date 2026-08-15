@@ -1,7 +1,9 @@
 let students = [];
 
+// Add a new student
 function addStudent() {
-    let name = document.getElementById("studentName").value.trim();
+    const nameInput = document.getElementById("studentName");
+    const name = nameInput.value.trim();
 
     if (name === "") {
         alert("Please enter student name");
@@ -13,24 +15,37 @@ function addStudent() {
         attendance: "Absent"
     });
 
-    document.getElementById("studentName").value = "";
+    nameInput.value = "";
+
     displayStudents();
 }
 
+// Toggle attendance
 function markAttendance(index) {
-    students[index].attendance =
-        students[index].attendance === "Absent"
-            ? "Present"
-            : "Absent";
+    if (students[index].attendance === "Absent") {
+        students[index].attendance = "Present";
+    } else {
+        students[index].attendance = "Absent";
+    }
 
     displayStudents();
 }
 
+// Delete student
+function deleteStudent(index) {
+    students.splice(index, 1);
+
+    displayStudents();
+}
+
+// Display students
 function displayStudents() {
     const list = document.getElementById("studentList");
+
     list.innerHTML = "";
 
     students.forEach((student, index) => {
+
         const li = document.createElement("li");
 
         const statusClass =
@@ -39,12 +54,20 @@ function displayStudents() {
                 : "absent";
 
         li.innerHTML = `
-            ${student.name} -
+            <span class="student-name">
+                ${student.name}
+            </span>
+
             <span class="${statusClass}">
                 ${student.attendance}
             </span>
+
             <button onclick="markAttendance(${index})">
                 Toggle Attendance
+            </button>
+
+            <button onclick="deleteStudent(${index})">
+                Delete
             </button>
         `;
 
